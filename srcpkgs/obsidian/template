@@ -1,0 +1,32 @@
+# Template file for 'obsidian'
+pkgname=obsidian
+version=1.12.7
+revision=1
+archs="x86_64 aarch64"
+short_desc="The free and flexible note taking app for your private thoughts"
+maintainer="Brian Ma <brianma360@gmail.com>"
+license="LicenseRef-Obsidian"
+homepage="https://obsidian.md"
+
+case "$XBPS_TARGET_MACHINE" in
+	x86_64)
+		distfiles="https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz"
+		checksum="fcbe08b111d9c1fdb09b9c08952b06e1c829c62163eba2584c4b4ec859be079d"
+		;;
+	aarch64)
+		distfiles="https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}-arm64.tar.gz"
+		checksum="6bc8727bfdbb6d731d5af9a06f51d6de7061c68c908c8ae8b43a9ed379a20260"
+		;;
+esac
+
+do_install() {
+	# install the files
+	vmkdir usr/lib/obsidian
+	vcopy * usr/lib/obsidian
+	vinstall resources/icon.png 644 usr/share/icons/hicolor/512x512/apps obsidian.png
+	vinstall ${FILESDIR}/obsidian.desktop 644 usr/share/applications
+
+	# link the library
+	vmkdir /usr/bin/
+	ln -s /usr/lib/obsidian/obsidian ${DESTDIR}/usr/bin/
+}
